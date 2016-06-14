@@ -26,12 +26,18 @@
         <property name="show_sql">true</property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hbm2ddl.auto">create</property>
+        <property name="hbm2ddl.auto">validate</property>
 
         <!-- Entities mapping -->
         <mapping class="au.com.projetojava.model.City"/>
+        <mapping class="au.com.projetojava.model.Client"/>
+        <mapping class="au.com.projetojava.model.Employee"/>
+        <mapping class="au.com.projetojava.model.Item"/>
         <mapping class="au.com.projetojava.model.Make"/>
+        <mapping class="au.com.projetojava.model.Person"/>
         <mapping class="au.com.projetojava.model.Product"/>
+        <mapping class="au.com.projetojava.model.Sell"/>
         <mapping class="au.com.projetojava.model.State"/>
+        <mapping class="au.com.projetojava.model.User"/>
     </session-factory>
 </hibernate-configuration>
