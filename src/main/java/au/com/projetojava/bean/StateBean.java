@@ -1,5 +1,7 @@
 package au.com.projetojava.bean;
 
+import org.omnifaces.util.Messages;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -11,10 +13,6 @@ import javax.faces.context.FacesContext;
 public class StateBean {
 
     public void save(){
-        String text = "Java Web Programing";
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, text, text);
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, message);
+        Messages.addGlobalInfo("Java Web Programing");
     }
 }
