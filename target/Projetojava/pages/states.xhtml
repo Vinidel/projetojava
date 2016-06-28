@@ -11,38 +11,38 @@
     <title>State Prime Faces</title>
 </h:head>
 <h:body>
-
     <p:growl id="message" />
-
     <h:form>
         <p:panel header="States">
-            <p:dataTable emptyMessage="No State found" paginator="true">
+            <p:dataTable emptyMessage="No State found" paginator="true" value="#{stateBean.states}"
+                    var="state" rows="5">
                 <f:facet name="header">
-                    <p:commandButton value="new" oncomplete="PF('stateModal').show()"/>
+                    <p:commandButton value="new" oncomplete="PF('stateModal').show()"
+                            actionListener="#{stateBean.newState()}" update=":stateForm:panelState"/>
                 </f:facet>
-                <p:column headerText="Name">
-
+                <p:column headerText="Name" sortBy="#{state.name}" filterBy="#{state.name}">
+                    <h:outputText value="#{state.name}"/>
                 </p:column>
-                <p:column headerText="Short name">
-
+                <p:column headerText="Short name" sortBy="#{state.shortName}" filterBy="#{state.shortName}">
+                    <h:outputText value="#{state.shortName}"/>
                 </p:column>
                 <p:column headerText="Actions">
-
                 </p:column>
             </p:dataTable>
         </p:panel>
     </h:form>
     <p:dialog header="States" widgetVar="stateModal" draggable="false" resizable="false" modal="true">
-        <h:form>
-            <h:panelGrid columns="2">
+        <h:form id="stateForm">
+            <h:panelGrid id="panelState" columns="2">
                 <p:outputLabel value="Name:"/>
-                <p:inputText size="30" maxlength="50"/>
+                <p:inputText size="30" maxlength="50" value="#{stateBean.state.name}"/>
+
                 <p:outputLabel value="Short name:"/>
-                <p:inputText size="10" maxlength="2"/>
+                <p:inputText size="10" maxlength="3" value="#{stateBean.state.shortName}"/>
             </h:panelGrid>
             <h:panelGrid columns="2">
                 <p:commandButton value="Save" actionListener="#{stateBean.save()}"
-                                 update=":message"/>
+                                 update=":message :stateForm:panelState" />
                 <p:commandButton value="Canel" oncomplete="PF('stateModal').hide()"/>
             </h:panelGrid>
         </h:form>
