@@ -12,9 +12,9 @@
 </h:head>
 <h:body>
     <p:growl id="message" />
-    <h:form>
+    <h:form id="formStatesList">
         <p:panel header="States">
-            <p:dataTable emptyMessage="No State found" paginator="true" value="#{stateBean.states}"
+            <p:dataTable id="table" emptyMessage="No State found" paginator="true" value="#{stateBean.states}"
                     var="state" rows="5">
                 <f:facet name="header">
                     <p:commandButton value="new" oncomplete="PF('stateModal').show()"
@@ -27,9 +27,25 @@
                     <h:outputText value="#{state.shortName}"/>
                 </p:column>
                 <p:column headerText="Actions">
+                    <p:commandButton icon="ui-icon-trash"
+                                     actionListener="#{stateBean.remove}"
+                                     update=":message :formStatesList:table">
+                        <f:attribute name="removedState" value="#{state}"/>
+                         <p:confirm header="Remove state" message="Are you sure?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-pencil"
+                                     update=":formStatesList:table :stateForm:panelState"
+                            actionListener="#{stateBean.edit}"
+                            oncomplete="PF('stateModal').show()">
+                        <f:attribute name="editedState" value="#{state}"/>
+                    </p:commandButton>
                 </p:column>
             </p:dataTable>
         </p:panel>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
     </h:form>
     <p:dialog header="States" widgetVar="stateModal" draggable="false" resizable="false" modal="true">
         <h:form id="stateForm">
@@ -42,7 +58,7 @@
             </h:panelGrid>
             <h:panelGrid columns="2">
                 <p:commandButton value="Save" actionListener="#{stateBean.save()}"
-                                 update=":message :stateForm:panelState" />
+                                 update=":message :stateForm:panelState :formStatesList:table"/>
                 <p:commandButton value="Canel" oncomplete="PF('stateModal').hide()"/>
             </h:panelGrid>
         </h:form>

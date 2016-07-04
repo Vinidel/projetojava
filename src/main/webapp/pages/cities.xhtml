@@ -11,36 +11,59 @@
     <title>Cities</title>
 </h:head>
 <h:body>
-    <h:form>
+    <p:growl id="message" />
+    <h:form id="citiesForm">
         <p:panel header="Cities">
-            <p:dataTable emptyMessage="No City found" paginator="true">
+            <p:dataTable id="table" emptyMessage="No City found" paginator="true"
+                         value="#{cityBean.cities}"
+                         var="city"
+                    rows="5">
                 <f:facet name="header">
-                    <p:commandButton value="new" oncomplete="PF('cityModal').show()"/>
+                    <p:commandButton value="new" oncomplete="PF('cityModal').show()"
+                                      actionListener="#{cityBean.newCity}"
+                            update=":cityForm:cityPanel"/>
                 </f:facet>
-                <p:column headerText="Name">
-
+                <p:column headerText="Name" filterBy="#{city.name}" sortBy="#{city.name}">
+                    <h:outputText value="#{city.name}"/>
                 </p:column>
-                <p:column headerText="State">
-
+                <p:column headerText="State" filterBy="#{city.state.name}" sortBy="#{city.state.name}">
+                    <h:outputText value="#{city.state.name}"/>
+                    <h:outputText value=" - "/>
+                    <h:outputText value="#{city.state.shortName}"/>
                 </p:column>
                 <p:column headerText="Actions">
-
+                    <p:commandButton icon="ui-icon-trash"
+                                     update=":message">
+                        <f:attribute name="removedState" value="#{city}"/>
+                        <p:confirm header="Remove state" message="Are you sure?" icon="ui-icon-alert" />
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-pencil"
+                                     update=""
+                                     oncomplete="PF('cityModal').show()">
+                        <f:attribute name="editedCity" value="#{city}"/>
+                    </p:commandButton>
                 </p:column>
             </p:dataTable>
         </p:panel>
     </h:form>
     <p:dialog header="City" widgetVar="cityModal" draggable="false" resizable="false" modal="true">
-        <h:form>
-            <h:panelGrid columns="2">
+        <h:form id="cityForm">
+            <h:panelGrid id="cityPanel" columns="2">
                 <p:outputLabel value="Name:"/>
-                <p:inputText size="30" maxlength="50"/>
+                <p:inputText size="30" maxlength="50" value="#{cityBean.city.name}"/>
                 <p:outputLabel value="State:"/>
-                <p:selectOneMenu filter="true">
-                    <f:selectItem itemValue="" itemLabel="Select one State"/>
+
+                <p:selectOneMenu filter="true" value="#{cityBean.city.state}" converter="omnifaces.SelectItemsConverter">
+                    <f:selectItem noSelectionOption="true" itemLabel="Select one State" />
+                    <f:selectItems value="#{stateBean.states}" var="state"
+                            itemValue="#{state}" itemLabel="#{state.name}">
+                    </f:selectItems>
                 </p:selectOneMenu>
+
             </h:panelGrid>
             <h:panelGrid columns="2">
-                <p:commandButton value="Save"/>
+                <p:commandButton value="Save" actionListener="#{cityBean.save}"
+                                 update=":message :citiesForm:table :cityForm:cityPanel"/>
                 <p:commandButton value="Canel" oncomplete="PF('cityModal').hide()"/>
             </h:panelGrid>
         </h:form>

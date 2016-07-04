@@ -9,6 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -44,9 +45,10 @@ public class StateBean {
     public void save(){
         try {
             StateDAO stateDAO = new StateDAO();
-            stateDAO.save(this.getState());
+            stateDAO.merge(this.getState());
             Messages.addGlobalInfo("Name: " + this.state.getName() +  " Saved Succesfully");
             newState();
+            setStates(stateDAO.list());
         }catch (RuntimeException ex){
             ex.printStackTrace();
             Messages.addGlobalError("Error when saving " + this.state.getName());
@@ -62,5 +64,27 @@ public class StateBean {
             ex.printStackTrace();
             Messages.addGlobalError("Error listing states");
         }
+    }
+
+
+    public void remove(ActionEvent actionEvent ){
+
+        try{
+            StateDAO stateDAO = new StateDAO();
+            this.state = (State) actionEvent.getComponent().getAttributes().get("removedState");
+
+            stateDAO.delete(this.state);
+            setStates(stateDAO.list());
+            Messages.addGlobalInfo( this.state.getName() + " removed successfully");
+        }catch(RuntimeException ex){
+            ex.printStackTrace();
+            Messages.addGlobalError("Error removing " + this.state.getName());
+        }
+
+    }
+
+    public void edit(ActionEvent actionEvent){
+        this.state = (State) actionEvent.getComponent().getAttributes().get("editedState");
+        Messages.addGlobalInfo( this.state.getName());
     }
 }

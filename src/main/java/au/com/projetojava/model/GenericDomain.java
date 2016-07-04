@@ -25,4 +25,9 @@ public class GenericDomain implements Serializable{
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s[id=%d]", getClass().getSimpleName(), getId());
+    }
 }

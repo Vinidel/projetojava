@@ -19,6 +19,10 @@ public class City extends GenericDomain {
     @JoinColumn(nullable = false)
     private State state;
 
+    public City() {
+        this.state = new State();
+    }
+
     public String getName() {
         return name;
     }
